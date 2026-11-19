@@ -16,6 +16,12 @@ npm run preview
 
 Vite places the production output in `dist/`. The default build and hosted builds include **Continue to WhatsApp**. After validating the form, the site opens a prefilled chat with the clinic at `+91 7607 122 453`. The visitor reviews the details and taps **Send** in WhatsApp. The clinic confirms appointment times separately.
 
+## Deploy on Vercel
+
+Import the existing GitHub repository `Vt221001/physiotherapy` as a new Vercel project. Use the repository root and deploy the `main` branch. The root `vercel.json` configures Vite, the `npm run build` command, the `dist` output directory and the React Router fallback for direct links and refreshes.
+
+The WhatsApp appointment flow works with empty environment settings. After deployment, open `/services/sports-injury` directly, refresh the page, and follow its appointment link to check the preselected service.
+
 ## Deploy on Netlify
 
 1. Import the repository in Netlify. The build command, Node version, publish directory, form build flag and SPA rewrite are in `netlify.toml`.
