@@ -2,13 +2,14 @@
 import { Link, useParams } from 'react-router';
 import {
   Activity, CalendarDays, Check, CircleHelp, ClipboardCheck, Footprints, HeartHandshake,
-  MapPin, MessageCircle, Target,
+  MessageCircle, Target,
 } from 'lucide-react';
 import {
-  Accordion, AppointmentLink, AssessmentCaption, assessmentPhoto, Closing, Eyebrow,
+  Accordion, AppointmentLink, assessmentPhoto, Closing, Eyebrow,
   mobilityPhoto, PageHero, PageMeta, ServiceCard,
 } from './components.jsx';
 import { clinic, faqGroups, services, topics } from './content.js';
+import { HomeCinema } from './HomeCinema.jsx';
 
 const firstVisit = [
   { icon: MessageCircle, title: 'Tell us what’s changed', text: 'Talk through when the concern began, what you’ve already tried and how it affects the things you do each day.' },
@@ -20,26 +21,7 @@ export function Home() {
   return (
     <>
       <PageMeta description="The Wellness Physio Clinic in Meerganj, Jaunpur. Explore physiotherapy for pain, injuries and rehabilitation, and request an initial assessment." />
-      <section className="home-hero">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <Eyebrow>Physiotherapy in Jaunpur</Eyebrow>
-            <h1>Move better.<br /><em>Live fuller.</em></h1>
-            <p className="lead">Personalised physiotherapy for pain, injury and rehabilitation, with a plan shaped around the movements that matter to you.</p>
-            <div className="hero-actions">
-              <AppointmentLink />
-              <Link to="/services" className="button button-outline">Explore services</Link>
-            </div>
-            <a className="hero-location" href={clinic.map} target="_blank" rel="noreferrer"><MapPin size={17} aria-hidden="true" />Meerganj Market, Jaunpur</a>
-          </div>
-          <div className="hero-visual">
-            <div className="hero-frame">
-              <img src={assessmentPhoto.src} alt={assessmentPhoto.alt} width="883" height="887" fetchPriority="high" />
-            </div>
-            <AssessmentCaption />
-          </div>
-        </div>
-      </section>
+      <HomeCinema />
       <div className="care-strip">
         <div className="container care-strip-inner">
           <div><ClipboardCheck aria-hidden="true" /><span>Individual assessments</span></div>
@@ -49,7 +31,7 @@ export function Home() {
       </div>
 
       <section className="section intro-section">
-        <div className="container split-intro">
+        <div className="container split-intro" data-reveal>
           <div>
             <Eyebrow>Welcome to the clinic</Eyebrow>
             <h2>Care for the way <em>you move.</em></h2>
@@ -63,7 +45,7 @@ export function Home() {
 
       <section className="section services-section">
         <div className="container">
-          <div className="section-heading heading-row">
+          <div className="section-heading heading-row" data-reveal>
             <div><Eyebrow>Physiotherapy services</Eyebrow><h2>Find a place to <em>start.</em></h2></div>
             <Link className="button button-outline" to="/services">View all services</Link>
           </div>
@@ -75,10 +57,10 @@ export function Home() {
 
       <section className="section">
         <div className="container editorial-grid">
-          <figure className="editorial-photo">
+          <figure className="editorial-photo" data-reveal>
             <img src={mobilityPhoto.src} alt={mobilityPhoto.alt} width="883" height="887" loading="lazy" />
           </figure>
-          <div className="editorial-copy">
+          <div className="editorial-copy" data-reveal>
             <Eyebrow>Care built around you</Eyebrow>
             <h2>What would you like to <em>get back to?</em></h2>
             <p>Start with the activity that matters to you, whether that’s getting through a workday, walking to the market or returning to training. You can bring questions about:</p>
@@ -95,7 +77,7 @@ export function Home() {
 
       <section className="section visit-section">
         <div className="container">
-          <div className="section-heading centered">
+          <div className="section-heading centered" data-reveal>
             <Eyebrow>Your first visit</Eyebrow>
             <h2>What an assessment <em>may involve.</em></h2>
             <p>There’s time to ask questions and decide together what feels like a manageable next step.</p>
@@ -105,7 +87,7 @@ export function Home() {
               <article key={title}><span className="icon-tile"><Icon aria-hidden="true" /></span><h3>{title}</h3><p>{text}</p></article>
             ))}
           </div>
-          <div className="journey">
+          <div className="journey" data-reveal>
             <h3>From enquiry to ongoing care</h3>
             <ol>
               <li><strong>Enquire</strong><span>Tell the clinic what you’d like help with.</span></li>
@@ -118,7 +100,7 @@ export function Home() {
 
       <section className="section">
         <div className="container faq-layout">
-          <div>
+          <div data-reveal>
             <Eyebrow>Before you visit</Eyebrow>
             <h2>Common <em>questions.</em></h2>
             <p>Find out what to expect and what to bring.</p>
@@ -138,7 +120,7 @@ export function About() {
       <PageMeta title="About the Clinic" description="Learn how The Wellness Physio Clinic in Jaunpur approaches assessment, shared decisions and personalised physiotherapy goals." />
       <PageHero crumb="About" label="About the clinic" title={<>A practical approach to <em>better movement.</em></>} description="The Wellness Physio Clinic is a pain and rehabilitation centre in Meerganj, Jaunpur. Care begins with a conversation about what has changed and the activities you want to get back to." photo={mobilityPhoto} />
       <section className="section">
-        <div className="container editorial-grid about-philosophy">
+        <div className="container editorial-grid about-philosophy" data-reveal>
           <div><Eyebrow>Our philosophy</Eyebrow><h2>Your everyday life shapes <em>the plan.</em></h2></div>
           <div className="prose">
             <p>The impact of pain or reduced movement can show up in very ordinary moments. We want to understand how your work, home life, exercise and responsibilities affect what feels possible right now. That context helps us agree on something you can work on between visits.</p>
@@ -149,7 +131,7 @@ export function About() {
       </section>
       <section className="section visit-section">
         <div className="container">
-          <div className="section-heading"><Eyebrow>How we work</Eyebrow><h2>What guides <em>your care.</em></h2></div>
+          <div className="section-heading" data-reveal><Eyebrow>How we work</Eyebrow><h2>What guides <em>your care.</em></h2></div>
           <div className="process-grid">
             <article><span className="icon-tile"><MessageCircle aria-hidden="true" /></span><h3>Time to explain</h3><p>Use your own words to describe the concern, share what you’ve tried and tell us which parts of your routine are most affected.</p></article>
             <article><span className="icon-tile"><HeartHandshake aria-hidden="true" /></span><h3>Decisions together</h3><p>Ask about the options, share any concerns and discuss how a suggested activity would fit around your responsibilities.</p></article>
@@ -179,7 +161,7 @@ export function ServicesPage() {
       <PageHero crumb="Services" label="Physiotherapy services" title={<>Care for pain, injury <em>and movement.</em></>} description="Explore the concerns you can talk through at an assessment. If you’re unsure which area fits, tell the clinic what you’re finding difficult." photo={assessmentPhoto} />
       <section className="section">
         <div className="container">
-          <div className="section-heading"><Eyebrow>Explore care</Eyebrow><h2>Browse by <em>concern.</em></h2></div>
+          <div className="section-heading" data-reveal><Eyebrow>Explore care</Eyebrow><h2>Browse by <em>concern.</em></h2></div>
           <div className="filters" role="group" aria-label="Filter services by concern">
             {topics.map((topic) => (
               <button type="button" key={topic.id} aria-pressed={filter === topic.id} aria-controls="service-results" onClick={() => setFilter(topic.id)}>{topic.name}</button>
@@ -207,7 +189,7 @@ export function ServiceDetail() {
       </PageHero>
       <section className="section">
         <div className="container detail-grid">
-          <aside className="detail-aside">
+          <aside className="detail-aside" data-reveal>
             <Eyebrow>What to discuss</Eyebrow>
             <h2>Common concerns</h2>
             <ul className="check-list">{service.concerns.map((concern) => <li key={concern}><Check size={19} aria-hidden="true" />{concern}</li>)}</ul>
@@ -227,7 +209,7 @@ export function ServiceDetail() {
       </section>
       <section className="section">
         <div className="container">
-          <div className="section-heading"><Eyebrow>Explore services</Eyebrow><h2>Related areas <em>of care.</em></h2></div>
+          <div className="section-heading" data-reveal><Eyebrow>Explore services</Eyebrow><h2>Related areas <em>of care.</em></h2></div>
           <div className="service-grid related-grid">
             {service.related.map((id) => <ServiceCard key={id} service={services.find((related) => related.id === id)} />)}
           </div>
@@ -247,7 +229,7 @@ export function FaqPage() {
         <div className="container">
           {faqGroups.map(({ title, items }) => (
             <section className="faq-layout faq-group" key={title}>
-              <div><span className="icon-tile"><CircleHelp aria-hidden="true" /></span><h2>{title}</h2></div>
+              <div data-reveal><span className="icon-tile"><CircleHelp aria-hidden="true" /></span><h2>{title}</h2></div>
               <Accordion items={items} />
             </section>
           ))}

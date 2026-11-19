@@ -3,7 +3,7 @@
   descriptor: 'Pain & Rehabilitation Centre',
   location: 'Meerganj, Jaunpur',
   addressLines: ['Meerganj Market, near Sarvoday Inter School', 'Medpur Bankat Road, Jaunpur'],
-  phone: '+91 76071 22453',
+  phone: '+91 7607 122 453',
   telephone: '+917607122453',
   email: 'Shivamg1204@gmail.com',
   practitioner: 'Shivam Gupta',
@@ -148,7 +148,7 @@ export const faqGroups = [
   {
     title: 'Booking and practical details',
     items: [
-      ['Does an enquiry confirm my appointment?', 'Once your enquiry is received, wait for the clinic to confirm the date and time by phone or email before travelling.'],
+      ['Does an enquiry confirm my appointment?', 'Once your enquiry is received, wait for the clinic to confirm the date and time before travelling.'],
       ['Can I check fees, access or opening hours before visiting?', 'Yes. Call or email the clinic to check the fee, current hours, entrance accessibility or any assistance you may need to arrange.'],
       ['Where is the clinic?', 'The clinic is at Meerganj Market, near Sarvoday Inter School, on Medpur Bankat Road in Jaunpur. Contact the clinic if you would like help with directions.'],
     ],

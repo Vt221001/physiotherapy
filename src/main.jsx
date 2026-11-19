@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router';
 import '@fontsource-variable/manrope/wght.css';
 import '@fontsource-variable/sora/wght.css';
 import '@fontsource-variable/lora/wght-italic.css';
-import { Header, Footer, RouteChange } from './components.jsx';
+import { Header, Footer, RouteChange, ScrollReveal } from './components.jsx';
 import { About, FaqPage, Home, NotFound, ServiceDetail, ServicesPage } from './pages.jsx';
 import { Contact } from './Contact.jsx';
 import './styles.css';
@@ -16,6 +16,7 @@ function App() {
     <>
       <a className="skip-link" href="#main-content">Skip to main content</a>
       <RouteChange />
+      <ScrollReveal />
       <Header key={pathname} />
       <main id="main-content" tabIndex={-1}>
         <Routes>

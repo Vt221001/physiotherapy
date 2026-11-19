@@ -2,7 +2,7 @@
 import { Link, NavLink, useLocation } from 'react-router';
 import {
   Accessibility, Activity, Bone, Brain, CalendarDays, ChevronRight, ClipboardList,
-  Dumbbell, HeartHandshake, Mail, MapPin, Menu, Phone, Plus, X,
+  Dumbbell, Mail, MapPin, Menu, Phone, Plus, X,
 } from 'lucide-react';
 import { clinic, services } from './content.js';
 
@@ -37,6 +37,50 @@ export function RouteChange() {
     previous.current = pathname;
     window.scrollTo(0, 0);
     document.getElementById('main-content')?.focus({ preventScroll: true });
+  }, [pathname]);
+
+  return null;
+}
+
+export function ScrollReveal() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (typeof window.IntersectionObserver !== 'function' || typeof Element.prototype.animate !== 'function') return;
+
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (preference.matches) return;
+
+    const running = new Set();
+    const observer = new IntersectionObserver((entries) => {
+      for (const { isIntersecting, target } of entries) {
+        if (!isIntersecting || preference.matches) continue;
+        observer.unobserve(target);
+
+        const animation = target.animate([
+          { opacity: 0.8, transform: 'translateY(12px)' },
+          { opacity: 1, transform: 'translateY(0)' },
+        ], { duration: 440, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+        running.add(animation);
+        animation.onfinish = () => running.delete(animation);
+      }
+    }, { rootMargin: '0px 0px 32px 0px', threshold: 0.04 });
+
+    document.querySelectorAll('#main-content [data-reveal]').forEach((target) => observer.observe(target));
+
+    function stop() {
+      observer.disconnect();
+      observer.takeRecords();
+      for (const animation of running) animation.cancel();
+      running.clear();
+    }
+
+    const onPreferenceChange = (event) => { if (event.matches) stop(); };
+    preference.addEventListener('change', onPreferenceChange);
+    return () => {
+      preference.removeEventListener('change', onPreferenceChange);
+      stop();
+    };
   }, [pathname]);
 
   return null;
@@ -216,7 +260,7 @@ export function Closing({ service, title = 'Let’s start with a conversation.',
   return (
     <section className="section closing-section">
       <div className="container">
-        <div className="closing">
+        <div className="closing" data-reveal>
           <div>
             <Eyebrow>Talk to the clinic</Eyebrow>
             <h2>{title}</h2>
@@ -229,14 +273,5 @@ export function Closing({ service, title = 'Let’s start with a conversation.',
         </div>
       </div>
     </section>
-  );
-}
-
-export function AssessmentCaption() {
-  return (
-    <div className="photo-note">
-      <span className="photo-note-icon"><HeartHandshake size={22} strokeWidth={1.6} aria-hidden="true" /></span>
-      <div><strong>Care that starts with listening</strong><span>Assessment-led physiotherapy</span></div>
-    </div>
   );
 }

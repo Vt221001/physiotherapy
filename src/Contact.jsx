@@ -1,11 +1,12 @@
 ﻿import { useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { CalendarDays, Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import { Eyebrow, PageHero, PageMeta } from './components.jsx';
 import { clinic, services } from './content.js';
 
 const formPath = '/appointment-form.html';
 const hasFormDelivery = import.meta.env.VITE_NETLIFY_FORMS === 'true';
+const whatsAppNumber = clinic.telephone.replace(/\D/g, '');
 
 function validate(form, data) {
   const errors = {};
@@ -23,14 +24,34 @@ function validate(form, data) {
   return errors;
 }
 
+function appointmentWhatsAppLink(data) {
+  const details = [
+    ['Name', 'name'],
+    ['Email', 'email'],
+    ['Phone', 'phone'],
+    ['Area of care', 'service'],
+    ['Preferred timing', 'timing'],
+    ['Message', 'message'],
+  ];
+  const lines = ['Hello, I’d like to enquire about a physiotherapy appointment.', ''];
+  for (const [label, field] of details) {
+    const value = data.get(field)?.trim();
+    if (value) lines.push(label + ': ' + value);
+  }
+  lines.push('', 'I agree to be contacted about this enquiry.');
+  return 'https://wa.me/' + whatsAppNumber + '?text=' + encodeURIComponent(lines.join('\n'));
+}
+
 function AppointmentForm({ selected }) {
   const [status, setStatus] = useState('idle');
   const [errors, setErrors] = useState({});
+  const [whatsAppLink, setWhatsAppLink] = useState('');
 
   function clearError(event) {
     const { name } = event.target;
     if (errors[name]) setErrors((current) => ({ ...current, [name]: undefined }));
     if (status === 'error' || status === 'success') setStatus('idle');
+    if (whatsAppLink) setWhatsAppLink('');
   }
 
   function fieldProps(name, description) {
@@ -50,6 +71,7 @@ function AppointmentForm({ selected }) {
     event.preventDefault();
     if (status === 'sending') return;
 
+    setWhatsAppLink('');
     const form = event.currentTarget;
     const data = new FormData(form);
     const validation = validate(form, data);
@@ -61,8 +83,11 @@ function AppointmentForm({ selected }) {
       return;
     }
 
-    if (!hasFormDelivery) {
-      setStatus('error');
+    if (!hasFormDelivery || event.nativeEvent.submitter?.value !== 'online') {
+      const link = appointmentWhatsAppLink(data);
+      setStatus('idle');
+      setWhatsAppLink(link);
+      window.open(link, '_blank', 'noopener,noreferrer');
       return;
     }
 
@@ -94,7 +119,6 @@ function AppointmentForm({ selected }) {
       <Eyebrow>Appointment enquiry</Eyebrow>
       <h2>Tell us how we can help.</h2>
       <p>We’ll use your details to discuss your enquiry and confirm whether an appointment is available.</p>
-      {!hasFormDelivery && <p className="form-notice">Online enquiries are currently unavailable. You can call or email the clinic using the details on this page.</p>}
       <fieldset disabled={status === 'sending'} className="form-fields">
         <legend className="sr-only">Appointment details</legend>
         <div className="form-grid">
@@ -139,13 +163,20 @@ function AppointmentForm({ selected }) {
             {fieldError('consent')}
           </div>
         </div>
-        <button className="button button-primary form-submit" disabled={status === 'sending'} type="submit"><CalendarDays size={18} aria-hidden="true" />{status === 'sending' ? 'Sending enquiry…' : 'Send appointment enquiry'}</button>
+        <div className="form-actions">
+          <button className="button button-primary" type="submit" aria-describedby="whatsapp-guidance"><MessageCircle size={18} aria-hidden="true" />Continue to WhatsApp</button>
+          {hasFormDelivery && <button className="button button-outline" type="submit" value="online">{status === 'sending' ? 'Sending enquiry…' : 'Send online enquiry'}</button>}
+        </div>
+        <p id="whatsapp-guidance" className="form-hint">Review your prefilled message in WhatsApp and tap <strong>Send</strong>.</p>
       </fieldset>
       <div role="status" aria-live="polite">
         {status === 'sending' && <p className="sr-only">Sending your enquiry.</p>}
-        {status === 'success' && <p className="form-feedback success">Your enquiry was submitted. Please wait for the clinic to confirm your appointment by phone or email.</p>}
+        {status === 'success' && <p className="form-feedback success">Your enquiry was submitted. Please wait for the clinic to confirm your appointment.</p>}
+        {whatsAppLink && (
+          <p className="form-feedback whatsapp-note">If the chat didn’t open, <a href={whatsAppLink} target="_blank" rel="noopener noreferrer">open WhatsApp</a> to send your message.</p>
+        )}
       </div>
-      {status === 'error' && <p role="alert" className="form-feedback error">We couldn’t submit your enquiry. {hasFormDelivery ? 'Try again or contact the clinic by phone or email.' : 'Please contact the clinic by phone or email.'}</p>}
+      {status === 'error' && <p role="alert" className="form-feedback error">We couldn’t submit your enquiry. Try again or continue to WhatsApp.</p>}
     </form>
   );
 }
@@ -156,7 +187,7 @@ export function Contact() {
 
   return (
     <>
-      <PageMeta title="Contact & Appointments" description="Contact The Wellness Physio Clinic in Meerganj, Jaunpur by phone or email, or request an appointment." />
+      <PageMeta title="Contact & Appointments" description="Contact The Wellness Physio Clinic in Meerganj, Jaunpur or request an appointment via WhatsApp." />
       <PageHero crumb="Contact" label="Contact & appointments" title={<>Make time for <em>better movement.</em></>} description="Request an initial assessment or ask about an area of care. The clinic will discuss your enquiry and confirm the next step with you." />
       <section className="section">
         <div className="container contact-layout">
